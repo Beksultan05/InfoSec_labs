@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Logs</title>
+  <style>
+    body { margin: 20px; background: white; color: black; font-family: Arial, sans-serif; }
+    pre { font: 15px/1.6 monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <pre id="logs"></pre>
+  <script>
+    async function refresh() {
+      try {
+        const response = await fetch('/api/logs', {cache: 'no-store'});
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const result = await response.json();
+        document.getElementById('logs').textContent = result.lines.join('\n');
+      } catch (error) {
+        document.getElementById('logs').textContent = 'No connection';
+      }
+    }
+    refresh();
+    setInterval(refresh, 2000);
+  </script>
+</body>
+</html>
